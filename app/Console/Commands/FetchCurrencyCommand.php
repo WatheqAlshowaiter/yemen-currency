@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\City;
+use App\Models\Currency;
+use App\Models\Rate;
 use App\Services\CurrencyService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -14,28 +17,50 @@ class FetchCurrencyCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return int
      */
-    public function handle(CurrencyService $currencyService) : int
+    public function handle(CurrencyService $currencyService): int
     {
         $this->info('Fetching currency data...');
 
         try {
             if ($this->option('today')) {
-                $this->fetchTodayData($currencyService);
+                $data = $this->fetchTodayData($currencyService);
             } else {
-                $this->fetchHistoricalData($currencyService);
+                $data = $this->fetchHistoricalData($currencyService);
+            }
+
+            foreach ($data as $item) {
+
+                $city = match ($item['city']) {
+                    'Sanaa' => City::where('name', 'sanaa')->first(),
+                    'Aden' => City::where('name', 'aden')->first(),
+                };
+
+                $currency = match ($item['currency']) {
+                    'USD' => Currency::where('code', 'USD')->first(),
+                    'SAR' => Currency::where('code', 'SAR')->first(),
+                };
+
+                $rate = Rate::updateOrCreate([
+                    'city_id' => $city->id,
+                    'currency_id' => $currency->id,
+                    'date' => $item['date'],
+                ], [
+                    'buy_price' => $item['price_buy'],
+                    'sell_price' => $item['price_sell'],
+                ]);
             }
 
             $this->info('Currency data fetched successfully!');
+
             return Command::SUCCESS;
         } catch (\Exception $e) {
-            $this->error('Failed to fetch currency data: ' . $e->getMessage());
+            $this->error('Failed to fetch currency data: '.$e->getMessage());
             Log::error('Currency fetch command failed', [
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
+
             return Command::FAILURE;
         }
     }
@@ -43,14 +68,15 @@ class FetchCurrencyCommand extends Command
     /**
      * Fetch and display today's currency data.
      *
-     * @return void
+     * @return array
      */
     protected function fetchTodayData(CurrencyService $currencyService)
     {
         $data = $currencyService->getTodayCurrencies();
-        
+
         if (empty($data)) {
             $this->warn('No currency data available for today.');
+
             return;
         }
 
@@ -64,23 +90,26 @@ class FetchCurrencyCommand extends Command
                     $item['price_buy'],
                     $item['price_sell'],
                     $item['date'],
-                    $item['day']
+                    $item['day'],
                 ];
             }, $data)
         );
+
+        return $data;
     }
 
     /**
      * Fetch and display historical currency data.
      *
-     * @return void
+     * @return array
      */
     protected function fetchHistoricalData(CurrencyService $currencyService)
     {
         $data = $currencyService->getLastTwentyDays();
-        
+
         if (empty($data)) {
             $this->warn('No historical currency data available.');
+
             return;
         }
 
@@ -94,9 +123,11 @@ class FetchCurrencyCommand extends Command
                     $item['price_buy'],
                     $item['price_sell'],
                     $item['date'],
-                    $item['day']
+                    $item['day'],
                 ];
             }, $data)
         );
+
+        return $data;
     }
 }

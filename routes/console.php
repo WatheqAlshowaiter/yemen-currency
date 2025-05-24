@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('currency:fetch --today')
-    ->everySixHours() // 
+    ->everySixHours()
     ->appendOutputTo(storage_path('logs/currency-fetch.log'));
-    
