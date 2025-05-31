@@ -2,6 +2,9 @@
 
 namespace Tests\Unit;
 
+use App\Models\City;
+use App\Models\Currency;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 use App\Console\Commands\FetchCurrencyCommand;
@@ -10,6 +13,9 @@ use Mockery;
 
 class FetchCurrencyCommandTest extends TestCase
 {
+
+    use RefreshDatabase;
+
     protected $command;
     protected $currencyService;
 
@@ -27,6 +33,8 @@ class FetchCurrencyCommandTest extends TestCase
 
     public function testHandleWithTodayOption()
     {
+        $this->seedData();
+
         // Sample data for today's currencies
         $todayCurrencies = [
             [
@@ -66,6 +74,8 @@ class FetchCurrencyCommandTest extends TestCase
 
     public function testHandleWithoutTodayOption()
     {
+        $this->seedData();
+
         // Sample data for historical currencies
         $historicalCurrencies = [
             [
@@ -136,5 +146,14 @@ class FetchCurrencyCommandTest extends TestCase
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    private function seedData(): void
+    {
+        $sanaa = City::factory()->sanaa()->create();
+        $aden = City::factory()->aden()->create();
+
+        $usdDollar = Currency::factory()->usdDollar()->create();
+        $saudiRial = Currency::factory()->saudiRial()->create();
     }
 }

@@ -100,49 +100,39 @@
         <h1>أسعار العملات في اليمن</h1>
     
         <div class="tabs">
-            @foreach ($supportedCities as $city)
-                <div class="tab {{ $loop->first ? 'active' : '' }}" onclick="showTab(event, '{{ $city->id }}')">
-                     <span class="">{{ $city->label }} </span>
+            @foreach ($rates as $index => $rate)
+                <div class="tab {{ $loop->first ? 'active' : '' }}" onclick="showTab(event, 'city-{{ $index }}')">
+                    {{ $rate['city'] }}
                 </div>
             @endforeach
         </div>
     
-        @foreach ($rates as $cityId => $cityRates)
+        @foreach ($rates as $index => $cityRates)
 
-            @php
-                $city = $supportedCities->firstWhere('id', $cityId);
-            @endphp
-            <div id="{{ $cityId }}" class="currency-card {{ $loop->first ? 'active' : '' }}">
-                @foreach ($cityRates as $rate)
+        <div id="city-{{ $index }}" class="currency-card {{ $loop->first ? 'active' : '' }}">
+                @foreach ($cityRates['rates'] as $rate)
                     <div style="margin-bottom: {{ $loop->last ? '0' : '10px' }}; border-bottom: {{ $loop->last ? 'none' : '1px dashed #ccc' }}; padding-bottom: 10px;">
                         <div class="currency-info">
                             <strong>العملة:</strong>
-                            <span>{{ $rate->currency->name }}</span>
+                            <span>{{ $rate['currency'] }}</span>
                         </div>
                         <div class="currency-info">
                             <strong>سعر الشراء:</strong>
-                            <span>{{ $rate->buy_price }} ريال يمني</span>
+                            <span>{{ $rate['buy_price'] }} ريال يمني</span>
                         </div>
                         <div class="currency-info">
                             <strong>سعر البيع:</strong>
-                            <span>{{ $rate->sell_price }} ريال يمني</span>
+                            <span>{{ $rate['sell_price'] }} ريال يمني</span>
                         </div>
                         <div class="currency-info">
                             <strong>التاريخ:</strong>
-                            <span>{{ $rate->date->format('Y-m-d') }}</span>
+                            <span>{{ $rate['date'] }} ({{ $rate['day'] }})</span>
                         </div>
-                        <div class="currency-info">
-                            <strong>اليوم:</strong>
-                            <span>{{ $rate->date->locale('ar')->isoFormat('dddd') }}</span>
-                        </div>
-
                         <div class="date-info">
-                            آخر تحديث: {{ $rate->updated_at?->diffForHumans() }}
+                            آخر تحديث: {{ $rate['last_update'] }}
                         </div>
                     </div>
                 @endforeach
-    
-          
             </div>
         @endforeach
     </div>

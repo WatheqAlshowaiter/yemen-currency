@@ -115,4 +115,20 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Global "Admin" Email Address
+    |--------------------------------------------------------------------------
+    |
+    | This address is used for sending important system alerts or notifications 
+    | to the administrator. It can be referenced across the app when notifying 
+    | the site admin about system-level issues.
+    |
+    */
+
+    'admin' => [
+       'address' => env('MAIL_ADMIN_ADDRESS'),
+        'name' => env('MAIL_ADMIN_NAME', 'Admin'),
+    ]
+
 ];

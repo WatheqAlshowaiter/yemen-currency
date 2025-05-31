@@ -41,9 +41,9 @@ class FetchCurrencyCommand extends Command
                     'SAR' => Currency::where('code', 'SAR')->first(),
                 };
 
-                $rate = Rate::updateOrCreate([
-                    'city_id' => $city->id,
-                    'currency_id' => $currency->id,
+                Rate::updateOrCreate([
+                    'city_id' => $city?->id,
+                    'currency_id' => $currency?->id,
                     'date' => $item['date'],
                 ], [
                     'buy_price' => $item['price_buy'],
@@ -60,6 +60,8 @@ class FetchCurrencyCommand extends Command
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
+
+            // todo mail when failing using resend
 
             return Command::FAILURE;
         }
@@ -110,7 +112,7 @@ class FetchCurrencyCommand extends Command
         if (empty($data)) {
             $this->warn('No historical currency data available.');
 
-            return;
+            return [];
         }
 
         $this->info('Last 20 Days Currency Data:');

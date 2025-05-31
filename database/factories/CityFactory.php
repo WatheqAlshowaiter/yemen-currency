@@ -19,6 +19,14 @@ class CityFactory extends Factory
     {
         return [
             'name' => fake()->randomElement(City::supportedCities()),
+
+            'label' => function ($attributes) {
+                return match ($attributes['name']) {
+                    City::SANAA => 'صنعاء',
+                    City::ADEN => 'عدن',
+                    default => $attributes['name'],
+                };
+            },
         ];
     }
 
@@ -26,7 +34,6 @@ class CityFactory extends Factory
     {
         return $this->state([
             'name' => City::SANAA,
-            'label' => 'صنعاء',
         ]);
     }
 
@@ -34,7 +41,6 @@ class CityFactory extends Factory
     {
         return $this->state([
             'name' => City::ADEN,
-            'label' => 'عدن',
         ]);
     }
 }

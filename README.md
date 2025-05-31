@@ -8,6 +8,8 @@ to be added
 ## Plan
 - [x] Add html view to show the currency data
 - [x] Save command data to database
+- [ ] email when failing fetching currency using resen
+- [ ] caching for fetching command (6 hours), and for the controller (1 hour)
 - [ ] make proper pagination
 - [ ] save tabs state as query param
 - [ ] make a complete test for the project
