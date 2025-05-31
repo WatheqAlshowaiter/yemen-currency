@@ -7,12 +7,11 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\DomCrawler\Crawler;
 use Tests\TestCase;
 
-/**
- * @group real test - requires internet connection and maybe slow
- */
+#[Group('real test')]
 class CurrencyServiceFeatureTest extends TestCase
 {
     protected $currencyService;
