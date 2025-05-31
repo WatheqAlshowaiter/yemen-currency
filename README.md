@@ -25,3 +25,4 @@ to be added
   
 ## Future Plans
 - add react native app to show the currency data
+- add native php destop app => in navbar and simple app also
