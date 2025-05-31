@@ -102,11 +102,11 @@ class RateControllerTest extends TestCase
         // Assert
         $response->assertStatus(200)
             ->assertViewIs('rates')
-            ->assertViewHasAll(['rates']);
+            ->assertViewHas('rates');
 
         $viewData = $response->original->getData();
 
-        $ratesCities = array_column($viewData['rates'], 'city');
+        $ratesCities = $viewData['rates']->pluck('city')->toArray(); 
 
         $this->assertContains($sanaa->label, $ratesCities);
         $this->assertContains($aden->label, $ratesCities);
