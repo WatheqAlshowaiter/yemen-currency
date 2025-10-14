@@ -59,6 +59,7 @@ class CurrencyService
             }
 
             return $results;
+
         } catch (\Exception $e) {
             Log::error('Failed to fetch currency data for last twenty days', [
                 'error' => $e->getMessage(),

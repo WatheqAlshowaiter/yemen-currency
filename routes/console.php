@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('currency:fetch --today')
     ->everySixHours()
-    ->appendOutputTo(storage_path('logs/currency-fetch.log'))
+    ->appendOutputTo(storage_path('logs/' . today()->format('Y-m-d') . '.log'))
     ->onFailure(function () {
         // TODO: set the correct sender email
         // TODO: set the correct recipient email
