@@ -13,6 +13,8 @@ RUN apk add --no-cache \
     git \
     oniguruma-dev \
     sqlite \
+    sqlite-dev \
+    mysql-client \
     nodejs \
     npm
 
@@ -47,8 +49,4 @@ USER www-data
 EXPOSE 8000
 
 # Start the application
-CMD php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php artisan migrate --force && \
-    php artisan serve --host=0.0.0.0 --port=8000
+CMD ["/bin/sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
