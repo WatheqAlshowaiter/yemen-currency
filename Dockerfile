@@ -16,10 +16,12 @@ RUN apk add --no-cache \
     sqlite-dev \
     mysql-client \
     nodejs \
-    npm
+    npm \
+    postgresql-client \
+    postgresql-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pdo_mysql pdo_sqlite pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -49,4 +51,4 @@ USER www-data
 EXPOSE 8000
 
 # Start the application
-CMD ["/bin/sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["/bin/sh", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000", "php artisan currency:fetch --today"]

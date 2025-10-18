@@ -383,9 +383,46 @@
             }
         }
 
+        /* Footer Styles */
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .footer-link {
+            color: var(--medium-gray);
+            text-decoration: none;
+            font-size: 13px;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .footer-link:hover {
+            color: var(--secondary-color);
+            background: var(--light-gray);
+        }
+
+        .footer-text {
+            color: var(--medium-gray);
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
         /* Accessibility */
         .tab:focus,
-        .pagination-link:focus {
+        .pagination-link:focus,
+        .footer-link:focus {
             outline: 2px solid var(--secondary-color);
             outline-offset: 2px;
         }
@@ -461,6 +498,15 @@
         @endforeach
 
        {{ $rates->links() }}
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="/privacy-policy" class="footer-link">سياسة الخصوصية</a>
+                <span class="footer-text">|</span>
+                <a href="/" class="footer-link">الصفحة الرئيسية</a>
+            </div>
+            <p class="footer-text">&copy; {{ date('Y') }} تطبيق أسعار العملات في اليمن</p>
+        </footer>
     </div>
 
     <script>
